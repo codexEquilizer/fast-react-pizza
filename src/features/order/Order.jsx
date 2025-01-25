@@ -1,13 +1,15 @@
 /* eslint-disable no-unused-vars */
 // Test ID: IIDSAT
 
+import { useLoaderData } from "react-router-dom";
+import { getOrder } from "../../services/apiRestaurant";
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
 } from "../../utils/helpers";
 
-const order = {
+/* const order = {
   id: "ABCDEF",
   customer: "Jonas",
   phone: "123456789",
@@ -40,9 +42,11 @@ const order = {
   position: "-9.000,38.000",
   orderPrice: 95,
   priorityPrice: 19,
-};
+}; */
 
 function Order() {
+  const order = useLoaderData();
+  console.log("Order Data", order);
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {
     id,
@@ -82,6 +86,11 @@ function Order() {
       </div>
     </div>
   );
+}
+
+export async function loader({ params }) {
+  const orderData = await getOrder(params.orderId);
+  return orderData;
 }
 
 export default Order;
